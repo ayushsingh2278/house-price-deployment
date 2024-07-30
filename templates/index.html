@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Prediction</title>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault();
+            let formData = new FormData(document.getElementById('prediction-form'));
+            let response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            let result = await response.json();
+            document.getElementById('result').innerText = result.prediction || result.error;
+        }
+    </script>
+</head>
+<body>
+    <h1>House Price Prediction</h1>
+    <form id="prediction-form" onsubmit="submitForm(event)">
+        <label for="bath">Bath:</label>
+        <input type="number" step="any" id="bath" name="bath" required><br>
+        <label for="total_sqft">Total Sqft:</label>
+        <input type="number" step="any" id="total_sqft" name="total_sqft" required><br>
+        <label for="bhk">BHK:</label>
+        <input type="number" step="any" id="bhk" name="bhk" required><br>
+        <label for="location">Location:</label>
+        <select id="location" name="location">
+            {% for location in locations %}
+                <option value="{{ location }}">{{ location }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Predict">
+    </form>
+    <div id="result"></div>
+</body>
+</html>
