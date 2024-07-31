@@ -52,7 +52,10 @@ async def predict(bath: float = Form(...), total_sqft: float = Form(...), bhk: f
     try:
         prediction = pipe.predict(input_data)[0]
         #print(prediction)
-        return {"prediction": f'The estimated price of the house is {prediction/100:,.2f} crores'}
+        if prediction > 0:
+            return {"prediction": f'The estimated price of the house is {prediction/100:,.2f} crores'}
+        else:
+            return {"Prediction": 'Negative value have been generated please enter the correct inputs'}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
